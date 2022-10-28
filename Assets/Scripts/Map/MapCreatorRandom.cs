@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MapCreatorRandom : MapCreator
 {
-    [SerializeField] private int _height;
-    [SerializeField] private int _length;
+    [SerializeField] private int _length; 
+     [SerializeField] private int _height;
 
 
 

@@ -24,7 +24,7 @@ public class MapBubble : MonoBehaviour
     private void CreateMap()
     {
         _map = _mapCreator.CreateMap();
-        _mapBubbles = new Bubble[_map.GetUpperBound(0)+1, _map.GetUpperBound(1)+1];
+        _mapBubbles = new Bubble[_map.GetUpperBound(0)+1, _map.GetUpperBound(1)+4];
         for (int i=0;i<= _map.GetUpperBound(0); i++)
         {
             int horizontalQuantity = _map.GetUpperBound(1);
@@ -48,12 +48,8 @@ public class MapBubble : MonoBehaviour
                     if (_bubblePool.TryGetBubble(out Bubble bubble, _map[i, j]) == true)
                     {
                         bubble.gameObject.SetActive(true);
-                        float x = (j + offset) * bubble.transform.localScale.x-(_map.GetUpperBound(1)* bubble.transform.localScale.x/2);
-                        float y = (-i * bubble.transform.localScale.y) - bubble.transform.localScale.y;
-
-
-                        Vector2 position = new Vector2(x, y);
-                        bubble.transform.localPosition = position;
+                        bubble.Move(i, j, _map.GetUpperBound(1), offset);
+                       
                         _mapBubbles[i, j] = bubble;
                     }
                     else
@@ -65,9 +61,70 @@ public class MapBubble : MonoBehaviour
         }
     }
 
-    //public List<Bubble> GetNearBubbles(int _colorNumber,Bubble bubble)
-    //{
+    public List<Bubble> GetNearBubbles(Bubble bubble)
+    {
+        int[] offsetCoordinatesX;
+        int[] offsetCoordinatesY = new int[] { -1, -1, 0, 1, 1, 0 };
+
+
+        List<Bubble> result = new List<Bubble>();
+        List<Bubble> needCheck = new List<Bubble>();
         
-    //}
+        needCheck.Add(bubble);
+
+        while (needCheck.Count > 0)
+        {
+            Vector2 _position = needCheck[0].Position;
+            if (_position.y % 2 == 0)
+            {
+                offsetCoordinatesX = new int[] { 0, -1, -1, -1, 0, 1 };                
+            }
+            else
+            {
+                offsetCoordinatesX = new int[] { 1, 0, -1, 0, 1, 1 };                
+            }
+
+            for (int i=0;i< offsetCoordinatesX.Length; i++)
+            {
+                int x = (int)(_position.x + offsetCoordinatesX[i]);
+                if (x>=0 && x <= _mapBubbles.GetUpperBound(0))
+                {
+                    int y = (int)(_position.y + offsetCoordinatesY[i]);
+                    if (y >= 0 && y <= _mapBubbles.GetUpperBound(1))
+                    {
+                        if(_mapBubbles[x, y] != null)
+                        {
+                            if(result.Contains(_mapBubbles[x, y]) == false)
+                            {
+                                if (bubble.ColorNumber == _mapBubbles[x, y].ColorNumber)
+                                {
+                                    if(needCheck.Contains(_mapBubbles[x, y]) == false)
+                                    {
+                                        needCheck.Add(_mapBubbles[x, y]);
+                                    }
+                                    
+                                }
+                            }
+                            
+                        }
+                        
+                    }
+                }
+            }
+            result.Add(needCheck[0]);
+            needCheck.Remove(needCheck[0]);
+        }
+        if (result.Count > 2)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+
+
+
+    }
 
 }
