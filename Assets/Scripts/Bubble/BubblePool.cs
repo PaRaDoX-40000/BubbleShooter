@@ -12,10 +12,9 @@ public class BubblePool : MonoBehaviour
     private void Awake()
     {
         CreateBubbles();
+       
     }
-
-  
-
+   
     private void CreateBubbles()
     {
         for (int i = 0; i < _bubbleCounts.Length; i++)
@@ -30,9 +29,16 @@ public class BubblePool : MonoBehaviour
             _bubbles.Add(bubbles);
         }       
     }
+    private Bubble CreateOneBubbles(Bubble bubble)
+    {
+        Bubble bubbleClone = Instantiate(bubble, _connector);
+        bubbleClone.gameObject.SetActive(false);
+        return bubbleClone;
+    }
+
     public bool TryGetBubble(out Bubble bubble,int colorNumber)
     {
-        List<Bubble> bubbles = new List<Bubble>();
+        List<Bubble> bubbles;
        
         try
         {
@@ -61,7 +67,9 @@ public class BubblePool : MonoBehaviour
             }
             else
             {
-                Debug.LogError("не хватает шаров номер цвета " + colorNumber + " для визуализации");
+                bubble = CreateOneBubbles(bubbles[0]);
+                bubbles.Add(bubble);
+                return true;
             }
         }
         else

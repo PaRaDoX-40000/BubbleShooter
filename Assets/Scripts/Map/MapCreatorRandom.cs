@@ -12,9 +12,10 @@ public class MapCreatorRandom : MapCreator
     public override int[,] CreateMap()
     {
         int[,] map = new int[_height, _length];
-        for (int i = 0; i < map.GetUpperBound(0); i++)
-        {           
-            for (int j = 0; j < map.GetUpperBound(1); j++)
+        for (int i = 0; i <= map.GetUpperBound(0); i++)
+        {
+            ;
+            for (int j = 0; j <= map.GetUpperBound(1); j++)
             {
                 map[i,j] = Random.Range(0, 4);
             }
