@@ -6,12 +6,54 @@ public class MapBubble : MonoBehaviour
 {
     [SerializeField] private BubblePool _bubblePool;
     [SerializeField] private MapCreator _mapCreator;
-    private int[,] _map;
+    [SerializeField] private MapInterpreter _mapInterpreter;
+    private int[,] _map = new int[,] { { 1, 2, 3 }, { 3, 3, 3 }, { 1, 1, 1 }, { 2, 2, 2 } };
     private Bubble[,] _mapBubbles;
 
     void Start()
     {
         CreateMap();
+    }
+
+    public bool TryAddbubble(Vector2 hitVector, Bubble bubbleSticking, int colorNumber, out Bubble bubbleResult)
+    {
+        bubbleResult = null;
+        if (_mapInterpreter.InterpretVectorIntoLocalCoordinates(hitVector, (int)bubbleSticking.Position.y, out Vector2 position) == true)
+        {
+            int x = (int)(position.x + bubbleSticking.Position.x);
+            int y = (int)(position.y + bubbleSticking.Position.y);           
+            if (WithinArray(y, x) == false)
+            {
+                Debug.Log("no");
+                return false;              
+            }
+            else
+            {            
+                if (_bubblePool.TryGetBubble(out Bubble bubbleObject, colorNumber) == true)
+                {
+                    bubbleObject.gameObject.SetActive(true);
+                    bubbleObject.Move(y, x, _map.GetUpperBound(1));
+                    _mapBubbles[y, x] = bubbleObject;
+                    bubbleResult = bubbleObject;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+    private bool WithinArray(int y, int x)
+    {
+       
+        if (y >= 0 && y <= _mapBubbles.GetUpperBound(0))
+        {
+          
+            
+            if (x >= 0 && x <= _mapBubbles.GetUpperBound(1))
+            {
+                return true;
+            }
+        }        
+        return false;
     }
 
 
@@ -24,37 +66,34 @@ public class MapBubble : MonoBehaviour
     private void CreateMap()
     {
         _map = _mapCreator.CreateMap();
-        _mapBubbles = new Bubble[_map.GetUpperBound(0)+1, _map.GetUpperBound(1)+4];
-        for (int i=0;i<= _map.GetUpperBound(0); i++)
+        _mapBubbles = new Bubble[_map.GetUpperBound(0)+5, _map.GetUpperBound(1)+4];
+        for (int y=0;y<= _map.GetUpperBound(0); y++)
         {
-            int horizontalQuantity = _map.GetUpperBound(1);
-            
-
-            float offset = 0;
-            if (i % 2 == 1)
+            int horizontalQuantity = _map.GetUpperBound(1);                      
+            if (y % 2 == 1)
             {
-                horizontalQuantity = _map.GetUpperBound(1)-1;
-                offset = 0.5f;
+                horizontalQuantity = _map.GetUpperBound(1) - 1;
+               
             }
             else
             {
                 horizontalQuantity = _map.GetUpperBound(1);
-                offset = 0;
+               
             }
-            for (int j = 0; j <= horizontalQuantity; j++)
+            for (int x = 0; x <= horizontalQuantity; x++)
             {
-                if (_map[i, j] != 0)
+                if (_map[y, x] != 0)
                 {
-                    if (_bubblePool.TryGetBubble(out Bubble bubble, _map[i, j]) == true)
+                    if (_bubblePool.TryGetBubble(out Bubble bubble, _map[y, x]) == true)
                     {
                         bubble.gameObject.SetActive(true);
-                        bubble.Move(i, j, _map.GetUpperBound(1), offset);
+                        bubble.Move(y, x, _map.GetUpperBound(1));
                        
-                        _mapBubbles[i, j] = bubble;
+                        _mapBubbles[y, x] = bubble;
                     }
                     else
                     {
-                        _mapBubbles[i, j] = null;
+                        _mapBubbles[y, x] = null;
                     }
                 }
             }
@@ -87,27 +126,24 @@ public class MapBubble : MonoBehaviour
             for (int i=0;i< offsetCoordinatesX.Length; i++)
             {
                 int x = (int)(_position.x + offsetCoordinatesX[i]);
-                if (x>=0 && x <= _mapBubbles.GetUpperBound(0))
+                int y = (int)(_position.y + offsetCoordinatesY[i]);
+
+                if (WithinArray(y, x))
                 {
-                    int y = (int)(_position.y + offsetCoordinatesY[i]);
-                    if (y >= 0 && y <= _mapBubbles.GetUpperBound(1))
+                    if (_mapBubbles[y, x] != null)
                     {
-                        if(_mapBubbles[x, y] != null)
+                        if (result.Contains(_mapBubbles[y, x]) == false)
                         {
-                            if(result.Contains(_mapBubbles[x, y]) == false)
+                            if (bubble.ColorNumber == _mapBubbles[y, x].ColorNumber)
                             {
-                                if (bubble.ColorNumber == _mapBubbles[x, y].ColorNumber)
+                                if (needCheck.Contains(_mapBubbles[y, x]) == false)
                                 {
-                                    if(needCheck.Contains(_mapBubbles[x, y]) == false)
-                                    {
-                                        needCheck.Add(_mapBubbles[x, y]);
-                                    }
-                                    
+                                    needCheck.Add(_mapBubbles[y, x]);
                                 }
+
                             }
-                            
                         }
-                        
+
                     }
                 }
             }
@@ -122,9 +158,19 @@ public class MapBubble : MonoBehaviour
         {
             return null;
         }
-
-
-
     }
+
+    public void DestroyNearBubbles(Bubble bubble)
+    {
+        List<Bubble> bubbles = GetNearBubbles(bubble);
+        if (bubbles != null)
+        {
+            foreach (Bubble bub in bubbles)
+            {
+                bub.gameObject.SetActive(false);
+                _mapBubbles[(int)bub.Position.y, (int)bub.Position.x] = null;
+            }
+        }
+    } 
 
 }

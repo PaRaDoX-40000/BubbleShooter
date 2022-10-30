@@ -10,12 +10,21 @@ public class Bubble : MonoBehaviour
     public int ColorNumber => _colorNumber;
     public Vector2 Position => _position;
 
-    public void Move(int i,int j,int MaxLineLength,float offset)
+    public void Move(int i,int j,int MaxLineLength)
     {
+        float offset = 0;
+        if (i % 2 == 1)
+        {          
+            offset = 0.5f;
+        }
+        else
+        {           
+            offset = 0;
+        }
         float x = (j + offset) * transform.localScale.x - (MaxLineLength * transform.localScale.x / 2);
         float y = (-i * transform.localScale.y) - transform.localScale.y;       
         transform.localPosition = new Vector2(x, y); ;
-        _position = new Vector2(i, j);
+        _position = new Vector2(j, i);
     }
 
 
