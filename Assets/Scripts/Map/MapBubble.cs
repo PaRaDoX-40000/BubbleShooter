@@ -5,14 +5,13 @@ using UnityEngine;
 public class MapBubble : MonoBehaviour
 {
     [SerializeField] private BubblePool _bubblePool;
-    [SerializeField] private MapCreator _mapCreator;
-    [SerializeField] private MapInterpreter _mapInterpreter;
-    private int[,] _map = new int[,] { { 1, 2, 3 }, { 3, 3, 3 }, { 1, 1, 1 }, { 2, 2, 2 } };
+    [SerializeField] private MapSpawner _mapSpawner;    
+    [SerializeField] private MapInterpreter _mapInterpreter;   
     private Bubble[,] _mapBubbles;
 
     void Start()
     {
-        CreateMap();
+        _mapBubbles = _mapSpawner.CreateMap();
     }
 
     public bool TryAddbubble(Vector2 hitVector, Bubble bubbleSticking, int colorNumber, out Bubble bubbleResult)
@@ -23,8 +22,7 @@ public class MapBubble : MonoBehaviour
             int x = (int)(position.x + bubbleSticking.Position.x);
             int y = (int)(position.y + bubbleSticking.Position.y);           
             if (WithinArray(y, x) == false)
-            {
-                Debug.Log("no");
+            {                
                 return false;              
             }
             else
@@ -32,7 +30,7 @@ public class MapBubble : MonoBehaviour
                 if (_bubblePool.TryGetBubble(out Bubble bubbleObject, colorNumber) == true)
                 {
                     bubbleObject.gameObject.SetActive(true);
-                    bubbleObject.Move(y, x, _map.GetUpperBound(1));
+                    bubbleObject.Move(y, x, _mapBubbles.GetUpperBound(1));
                     _mapBubbles[y, x] = bubbleObject;
                     bubbleResult = bubbleObject;
                 }
@@ -58,47 +56,7 @@ public class MapBubble : MonoBehaviour
 
 
 
-    public void SetMapCreator(MapCreator mapCreator)
-    {
-        _mapCreator = mapCreator;
-    }
-
-    private void CreateMap()
-    {
-        _map = _mapCreator.CreateMap();
-        _mapBubbles = new Bubble[_map.GetUpperBound(0)+5, _map.GetUpperBound(1)+4];
-        for (int y=0;y<= _map.GetUpperBound(0); y++)
-        {
-            int horizontalQuantity = _map.GetUpperBound(1);                      
-            if (y % 2 == 1)
-            {
-                horizontalQuantity = _map.GetUpperBound(1) - 1;
-               
-            }
-            else
-            {
-                horizontalQuantity = _map.GetUpperBound(1);
-               
-            }
-            for (int x = 0; x <= horizontalQuantity; x++)
-            {
-                if (_map[y, x] != 0)
-                {
-                    if (_bubblePool.TryGetBubble(out Bubble bubble, _map[y, x]) == true)
-                    {
-                        bubble.gameObject.SetActive(true);
-                        bubble.Move(y, x, _map.GetUpperBound(1));
-                       
-                        _mapBubbles[y, x] = bubble;
-                    }
-                    else
-                    {
-                        _mapBubbles[y, x] = null;
-                    }
-                }
-            }
-        }
-    }
+    
 
     public List<Bubble> GetNearBubbles(Bubble bubble)
     {

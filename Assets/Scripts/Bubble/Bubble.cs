@@ -13,13 +13,13 @@ public class Bubble : MonoBehaviour
     public void Move(int i,int j,int MaxLineLength)
     {
         float offset = 0;
-        if (i % 2 == 1)
-        {          
-            offset = 0.5f;
+        if (i % 2 == 0)
+        {
+            offset = 0;
         }
         else
         {           
-            offset = 0;
+            offset = 0.5f;
         }
         float x = (j + offset) * transform.localScale.x - (MaxLineLength * transform.localScale.x / 2);
         float y = (-i * transform.localScale.y) - transform.localScale.y;       
