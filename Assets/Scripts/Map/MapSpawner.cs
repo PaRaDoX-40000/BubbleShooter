@@ -18,11 +18,12 @@ public class MapSpawner : MonoBehaviour
 
     private void SpavnBubbleInvisible(int MaxLineLength)
     {
-        for (int i = 0; i <= MaxLineLength; i++)
+        //MaxLineLength += 1;
+        for (int i = -1; i <= MaxLineLength; i++)
         {
             Bubble bubble = Instantiate(_bubbleInvisiblePrefab,transform);
             bubble.gameObject.SetActive(true);
-            bubble.Move(-1, i, _map.GetUpperBound(1));
+            bubble.Move(-1, i, MaxLineLength);
         }
     }
 
@@ -30,7 +31,7 @@ public class MapSpawner : MonoBehaviour
     public Bubble[,] CreateMap()
     {
         _map = _mapCreator.CreateMap();
-        SpavnBubbleInvisible(_map.GetUpperBound(1)-1);
+        SpavnBubbleInvisible(_map.GetUpperBound(1));
         Bubble[,] mapBubbles = new Bubble[_map.GetUpperBound(0) + 5, _map.GetUpperBound(1)+1];
         Debug.Log(_map.GetUpperBound(0));
         Debug.Log(_map.GetUpperBound(1));

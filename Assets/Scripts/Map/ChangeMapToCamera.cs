@@ -20,7 +20,7 @@ public class ChangeMapToCamera : MonoBehaviour
         _borderTop.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 1f, Camera.main.nearClipPlane));
         _borderLeft.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 0.5f, Camera.main.nearClipPlane));
         _borderRight.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(1f, 0.5f, Camera.main.nearClipPlane));
-        _map.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 1f, Camera.main.nearClipPlane));
+        _map.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.98f, Camera.main.nearClipPlane));
 
     }
 
