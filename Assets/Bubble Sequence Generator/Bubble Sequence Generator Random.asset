@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 770609cd8cd88b24383f07a042d207c3, type: 3}
   m_Name: Bubble Sequence Generator Random
-  m_EditorClassIdentifier: Assembly-CSharp::BubbleSequenceGeneratorRandom
+  m_EditorClassIdentifier: 
   bubbles:
   - {fileID: 302850068577324637, guid: 27f8f0ec0729baf4fae59da8397420cd, type: 3}
   - {fileID: 2829840756604014824, guid: 1888a1e629d2f6e4e927f5b7a8f5f177, type: 3}
