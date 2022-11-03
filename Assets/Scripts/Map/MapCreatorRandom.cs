@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Map Creator Random", menuName = "Map Creator/Random", order = 100)]
 public class MapCreatorRandom : MapCreator
-{
-    [SerializeField] private int _length; 
+{ 
+     [SerializeField] private int _length; 
      [SerializeField] private int _height;
 
 
@@ -24,22 +25,7 @@ public class MapCreatorRandom : MapCreator
             }
               
         }
-        
-
-
-
+       
         return map;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    }    
 }

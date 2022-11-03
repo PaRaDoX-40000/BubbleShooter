@@ -9,7 +9,7 @@ public class MapBubble : MonoBehaviour
     [SerializeField] private MapInterpreter _mapInterpreter;   
     private Bubble[,] _mapBubbles;
 
-    void Start()
+    private void OnEnable()
     {
         _mapBubbles = _mapSpawner.CreateMap();
     }

@@ -9,16 +9,13 @@ public class MapSpawner : MonoBehaviour
     [SerializeField] private Bubble _bubbleInvisiblePrefab;
     private int[,] _map;
 
-   
-
     public void SetMapCreator(MapCreator mapCreator)
     {
         _mapCreator = mapCreator;
     }
 
     private void SpavnBubbleInvisible(int MaxLineLength)
-    {
-        //MaxLineLength += 1;
+    {        
         for (int i = -1; i <= MaxLineLength; i++)
         {
             Bubble bubble = Instantiate(_bubbleInvisiblePrefab,transform);
@@ -32,10 +29,7 @@ public class MapSpawner : MonoBehaviour
     {
         _map = _mapCreator.CreateMap();
         SpavnBubbleInvisible(_map.GetUpperBound(1));
-        Bubble[,] mapBubbles = new Bubble[_map.GetUpperBound(0) + 5, _map.GetUpperBound(1)+1];
-        Debug.Log(_map.GetUpperBound(0));
-        Debug.Log(_map.GetUpperBound(1));
-
+        Bubble[,] mapBubbles = new Bubble[_map.GetUpperBound(0) + 5, _map.GetUpperBound(1)+1];       
         for (int y = 0; y <= _map.GetUpperBound(0); y++)
         {
             int horizontalQuantity = _map.GetUpperBound(1);
@@ -67,7 +61,6 @@ public class MapSpawner : MonoBehaviour
                 }
             }
         }
-
         return mapBubbles;
     }
 }

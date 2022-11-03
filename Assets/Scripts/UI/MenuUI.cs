@@ -12,7 +12,6 @@ public class MenuUI : MonoBehaviour
     [SerializeField] private ButtonWithHighlighting _buttonRandomModSequence;
     [SerializeField] private ButtonWithHighlighting _buttonPreCreatedModSequence;
 
-
     private List<ButtonWithHighlighting> buttons = new List<ButtonWithHighlighting>();
 
     private void Awake()

@@ -6,7 +6,8 @@ using UnityEngine.Events;
 public class GameModeSelection : MonoBehaviour
 {
     [SerializeField] private MapCreator[] _mapCreators;
-    [SerializeField] private BubbleSequenceGenerator[] _bubbleSequenceGenerators;
+    [SerializeField] private BubbleSequenceGenerator[] _bubbleSequenceGenerators;    
+    [SerializeField] private GameStarter _gameStarter;
     [SerializeField] private MenuUI menuUI;
     private MapCreator _selectedMapCreator;
     private BubbleSequenceGenerator _selectedBubbleSequenceGenerator;
@@ -49,10 +50,6 @@ public class GameModeSelection : MonoBehaviour
     }
     private void Play()
     {
-        
+        _gameStarter.StartGame(_selectedMapCreator, _selectedBubbleSequenceGenerator);
     }
-
-
-
-
 }

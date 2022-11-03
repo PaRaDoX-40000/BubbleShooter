@@ -5,21 +5,18 @@ using UnityEngine.Events;
 
 public class CollisionProjectile : MonoBehaviour
 {
+    public UnityEvent ProjectileCollided;
 
     private int _colorNumber;
     private Bubble _bubble;
     private SpriteRenderer _spriteRenderer;
     private bool _ready =true;
-    public UnityEvent ProjectileCollided;
-
-
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
    
-
     public void SetColorNumber(Bubble bubble)
     {
         _colorNumber = bubble.ColorNumber;

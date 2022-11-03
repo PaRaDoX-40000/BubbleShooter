@@ -7,7 +7,7 @@ public class BubbleGun : MonoBehaviour
 {
     [SerializeField] private CollisionProjectile _collisionProjectile;
     [SerializeField] private ProjectileMovement _projectileMovement;  
-    [SerializeField] private BubbleSequenceGenerator bubbleSequenceGenerator;
+    [SerializeField] private BubbleSequenceGenerator _bubbleSequenceGenerator;
     private LineRenderer _lineRenderer;
     private Vector2 _pathVector = new Vector2();
     private bool _canShoot = true;
@@ -19,13 +19,28 @@ public class BubbleGun : MonoBehaviour
     {
         _projectileMovement.ProjectileFinishedMovement.AddListener(CanShootTrue);
         _lineRenderer = GetComponent<LineRenderer>();
+        
+    }
+
+    private void OnEnable()
+    {
         CanShootTrue();
+    }
+    private void OnDisable()
+    {
+        _lineRenderer.positionCount = 0;
+    }
+
+
+    public void SetBubbleSequenceGenerator(BubbleSequenceGenerator bubbleSequenceGenerator)
+    {
+        _bubbleSequenceGenerator = bubbleSequenceGenerator;
     }
 
     private void CanShootTrue()
     {
         _canShoot = true;
-        _collisionProjectile.SetColorNumber(bubbleSequenceGenerator.NextBubble());
+        _collisionProjectile.SetColorNumber(_bubbleSequenceGenerator.NextBubble());
     }
 
 

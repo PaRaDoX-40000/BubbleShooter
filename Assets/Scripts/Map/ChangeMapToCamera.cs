@@ -9,7 +9,6 @@ public class ChangeMapToCamera : MonoBehaviour
     [SerializeField] private GameObject _borderRight;
     [SerializeField] private GameObject _map;
 
-
     void Start()
     {
         MoveBoundariesCamera();
@@ -22,12 +21,5 @@ public class ChangeMapToCamera : MonoBehaviour
         _borderRight.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(1f, 0.5f, Camera.main.nearClipPlane));
         _map.transform.position = Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.98f, Camera.main.nearClipPlane));
 
-    }
-
-
-
-    void Update()
-    {
-        
     }
 }

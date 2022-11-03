@@ -11,20 +11,33 @@ public class BubblePool : MonoBehaviour
 
     private void Awake()
     {
-        CreateBubbles();
-       
+        CreateBubbles();      
     }
-   
+
+    private void OnDisable()
+    {
+        DisableBubbles();
+    }
+
+    private void DisableBubbles()
+    {
+        foreach(List<Bubble> bubbles in _bubbles)
+        {
+            foreach(Bubble bubble in bubbles)
+            {
+                bubble.gameObject.SetActive(false);
+            }
+        }
+    }
+
     private void CreateBubbles()
     {
         for (int i = 0; i < _bubbleCounts.Length; i++)
         {
             List<Bubble> bubbles = new List<Bubble>();
             for (int j = 0; j < _bubbleCounts[i].Count; j++)
-            {
-                Bubble bubble = Instantiate(_bubbleCounts[i].Bubble, _connector);
-                bubble.gameObject.SetActive(false);
-                bubbles.Add(bubble);
+            {                          
+                bubbles.Add(CreateOneBubbles(_bubbleCounts[i].Bubble));
             }
             _bubbles.Add(bubbles);
         }       
